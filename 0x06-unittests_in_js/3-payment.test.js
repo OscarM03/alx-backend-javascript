@@ -3,21 +3,13 @@ const { expect } = require('chai');
 const Utils = require('./utils');
 const sendPaymentRequestToApi = require('./3-payment');
 
-describe('sendPaymentRequestToApi', () => {
-  let spy;
+describe('processPayment', () => {
+  it('should utilize the calculateNumber method from Utils correctly', () => {
+    const utilsSpy = sinon.spy(Utils, 'calculateNumber');
 
-  beforeEach(() => {
-    spy = sinon.spy(Utils, 'calculateNumber');
-  });
-
-  afterEach(() => {
-    spy.restore();
-  });
-
-  it('should use the calculateNumber method of Utils with correct arguments', () => {
     sendPaymentRequestToApi(100, 20);
-
-    expect(spy.calledOnce).to.be.true;
-    expect(spy.calledWith('SUM', 100, 20)).to.be.true;
+    expect(utilsSpy.calledWith('SUM', 100, 20)).to.be.true;
+    expect(utilsSpy.callCount).to.equal(1);
+    utilsSpy.restore();
   });
 });
